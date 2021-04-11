@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -46,8 +47,26 @@ public class FSCPDU {
         this.seqNum = seqNum;
     }
 
-    public FSCPDU geraFSCPDU{
+    public byte[] geraFSCPDU(){
 
+        byte[] pdu = new byte[20];
+        byte[] type = ByteBuffer.allocate(4).putInt(this.getTipo()).array();
+        byte[] subtype = ByteBuffer.allocate(4).putInt(this.getTipo()).array();
+        byte[] seqnum = ByteBuffer.allocate(8).putLong(this.getTipo()).array();
+
+        int p = 0;
+
+        for(int i = 0; i < seqnum.length; i++, p++){
+            pdu[p] = seqnum[i];
+        }
+
+        for(int i = 0; i < type.length; i++, p++){
+            pdu[p] = type[i];
+        }
+        for(int i = 0; i < subtype.length; i++, p++){
+            pdu[p] = subtype[i];
+        }
+        return pdu;
     }
 
     public static long geraChecksum(byte[] bytes) {
