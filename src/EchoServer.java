@@ -9,7 +9,7 @@ public class EchoServer {
 
     public static void main(String[] args) {
         try {
-            ServerSocket ss = new ServerSocket(12345);
+            ServerSocket ss = new ServerSocket(8080);
 
             while (true) {
                 Socket socket = ss.accept();
