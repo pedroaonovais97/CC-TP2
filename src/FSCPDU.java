@@ -15,6 +15,12 @@ public class FSCPDU {
         this.subtipo = subtype;
     }
 
+    public FSCPDU(long seqNum,int type, int subtype,long fileID){
+        this.seqNum = seqNum;
+        this.tipo = type;
+        this.subtipo = subtype;
+    }
+
     public int getTipo(){
         return this.tipo;
     }
@@ -47,12 +53,13 @@ public class FSCPDU {
         this.seqNum = seqNum;
     }
 
+
     public byte[] geraFSCPDU(){
 
         byte[] pdu = new byte[20];
         byte[] type = ByteBuffer.allocate(4).putInt(this.getTipo()).array();
-        byte[] subtype = ByteBuffer.allocate(4).putInt(this.getTipo()).array();
-        byte[] seqnum = ByteBuffer.allocate(8).putLong(this.getTipo()).array();
+        byte[] subtype = ByteBuffer.allocate(4).putInt(this.getSubtipo()).array();
+        byte[] seqnum = ByteBuffer.allocate(8).putLong(this.getSeqNum()).array();
 
         int p = 0;
 
@@ -69,9 +76,13 @@ public class FSCPDU {
         return pdu;
     }
 
-    public static long geraChecksum(byte[] bytes) {
+
+    public byte[] geraChecksum(byte[] bytes) {
         Checksum crc32 = new CRC32();
         crc32.update(bytes, 0, bytes.length);
-        return crc32.getValue();
+        long c = crc32.getValue();
+        this.checksum = c;
+        byte[] checksBytes = ByteBuffer.allocate(8).putLong(checksum).array();
+        return checksBytes;
     }
 }
