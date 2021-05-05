@@ -4,28 +4,31 @@ import java.util.zip.Checksum;
 
 public class FSCPDU {
 
-    private int tipo;
-    private int subtipo;
-    private long checksum;
+    private byte tipo;
+    private byte subtipo;
     private long seqNum;
+    private long checksum;
 
-    public FSCPDU(long seqNum,int type, int subtype){
+    public FSCPDU(long seqNum,byte type, byte subtype){
         this.seqNum = seqNum;
         this.tipo = type;
         this.subtipo = subtype;
     }
 
-    public FSCPDU(long seqNum,int type, int subtype,long fileID){
-        this.seqNum = seqNum;
-        this.tipo = type;
-        this.subtipo = subtype;
-    }
-
-    public int getTipo(){
+    public byte getTipo(){
         return this.tipo;
     }
 
-    public int getSubtipo(){
+    @Override
+    public String toString() {
+        return "FSCPDU{" +
+                "tipo=" + tipo +
+                ", subtipo=" + subtipo +
+                ", seqNum=" + seqNum +
+                ", checksum=" + checksum;
+    }
+
+    public byte getSubtipo(){
         return this.subtipo;
     }
 
@@ -37,11 +40,11 @@ public class FSCPDU {
         return seqNum;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(byte tipo) {
         this.tipo = tipo;
     }
 
-    public void setSubtipo(int subtipo) {
+    public void setSubtipo(byte subtipo) {
         this.subtipo = subtipo;
     }
 
@@ -54,35 +57,46 @@ public class FSCPDU {
     }
 
 
-    public byte[] geraFSCPDU(){
+    public byte[] encodeFSCPDU(){
 
-        byte[] pdu = new byte[20];
-        byte[] type = ByteBuffer.allocate(4).putInt(this.getTipo()).array();
-        byte[] subtype = ByteBuffer.allocate(4).putInt(this.getSubtipo()).array();
+        byte[] pdu = new byte[18];
+        pdu[0] = tipo;
+        pdu[1] = subtipo;
         byte[] seqnum = ByteBuffer.allocate(8).putLong(this.getSeqNum()).array();
 
-        int p = 0;
+        int p = 2;
 
         for(int i = 0; i < seqnum.length; i++, p++){
             pdu[p] = seqnum[i];
         }
 
-        for(int i = 0; i < type.length; i++, p++){
-            pdu[p] = type[i];
+        byte[] checksum = geraChecksum(pdu);
+        for(int i = 0; i < checksum.length; i++,p++) {
+            pdu[p] = checksum[i];
         }
-        for(int i = 0; i < subtype.length; i++, p++){
-            pdu[p] = subtype[i];
-        }
+
         return pdu;
     }
 
 
     public byte[] geraChecksum(byte[] bytes) {
         Checksum crc32 = new CRC32();
-        crc32.update(bytes, 0, bytes.length);
+        crc32.update(bytes,10,bytes.length-10);
         long c = crc32.getValue();
         this.checksum = c;
         byte[] checksBytes = ByteBuffer.allocate(8).putLong(checksum).array();
         return checksBytes;
+    }
+
+    public FSCPDU decodeFSCPDU(byte[] bytes){
+        byte type = bytes[0];
+        byte subtype = bytes[1];
+        long seqNum = ByteBuffer.wrap(bytes,2,8).getLong();
+        long checksum = ByteBuffer.wrap(bytes,10,8).getLong();
+
+        FSCPDU pdu = new FSCPDU(seqNum,type,subtype);
+        pdu.setChecksum(checksum);
+
+        return pdu;
     }
 }
