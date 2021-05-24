@@ -21,9 +21,13 @@ public class EchoClient {
             out.flush();            
 
             String t;
-            while((t = in.readLine()) != null) 
-                System.out.println(t);
-            in.close();
+          /*  while((t = in.readLine()) != null)
+            {
+                out.println(t);
+                out.flush();
+                System.out.println("T:" + t);
+            } */
+            //in.close();
 
             socket.shutdownOutput();
             socket.shutdownInput();

@@ -1,12 +1,12 @@
 import java.io.IOException;
 import java.net.Socket;
 
-public class httpWorker extends Thread implements Runnable{
+public class HttpWorker extends Thread implements Runnable{
     Socket socket;
     String fileName;
 
 
-    public httpWorker(Socket s){
+    public HttpWorker(Socket s){
         this.socket = s;
     }
     @Override

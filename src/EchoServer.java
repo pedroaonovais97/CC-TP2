@@ -19,8 +19,7 @@ public class EchoServer {
 
                 String line;
                 while ((line = in.readLine()) != null) {
-                    out.println(line);
-                    out.flush();
+                    System.out.println("R: " + line);
                 }
 
                 socket.shutdownOutput();

@@ -15,6 +15,13 @@ public class FSCPDU {
         this.subtipo = subtype;
     }
 
+    public FSCPDU()
+    {
+        this.seqNum = 0;
+        this.tipo = 0;
+        this.subtipo = 0;
+    }
+
     public byte getTipo(){
         return this.tipo;
     }
