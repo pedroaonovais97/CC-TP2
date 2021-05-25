@@ -1,20 +1,139 @@
-package FileTransfer;
+Amor é fogo que arde sem se ver
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+Amor é fogo que arde sem se ver;
+É ferida que dói e não se sente;
+É um contentamento descontente;
+É dor que desatina sem doer;
 
-/**
- *
- * @author Absalom Herrera
- */
-public class FileReceive {
-    
-    public static void main(String[] args) {
-        System.out.println("Ready to receive!");
-        int port = 1234; // Change this to the desired port
-        String serverRoute = "C:\\Users\\elpat\\Documents\\FileTransferTest"; // Change this to the desired directory route (Where the file will be stored)
-        createFile(port, serverRoute); // Creating the file
+É um não querer mais que bem querer;
+É solitário andar por entre a gente;
+É nunca contentar-se de contente;
+É cuidar que se ganha em se perder;
+
+É querer estar preso por vontade;
+É servir a quem vence, o vencedor;
+É ter com quem nos mata lealdade.
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Luís de Camões
+
+Tomou-me vossa vista soberana
+
+Tomou-me vossa vista soberana
+Aonde tinha as armas mais à mão,
+Por mostrar que quem busca defensão
+Contra esses belos olhos, que se engana.
+
+Por ficar da vitória mais ufana,
+Deixou-me armar primeiro da razão;
+Cuidei de me salvar, mas foi em vão,
+Que contra o Céu não vale defensa humana.
+
+Mas porém, se vos tinha prometido
+O vosso alto destino esta vitória,
+Ser-vos tudo bem pouco está sabido.
+
+Que posto que estivesse apercebido,
+Não levais de vencer-me grande glória;
+Maior a levo eu de ser vencido.
+
+                          Luís de Camões
+
+É ter com quem nos mata lealdade.
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Luís de Camões
+
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Luís de Camões
+
+Tomou-me vossa vista soberana
+
+Tomou-me vossa vista soberana
+Aonde tinha as armas mais à mão,
+Por mostrar que quem busca defensão
+Contra esses belos olhos, que se engana.
+
+Por ficar da vitória mais ufana,
+Deixou-me armar primeiro da razão;
+Cuidei de me salvar, mas foi em vão,
+Que contra o Céu não vale defensa humana.
+
+Mas porém, se vos tinha prometido
+O vosso alto destino esta vitória,
+Ser-vos tudo bem pouco está sabido.
+
+Que posto que estivesse apercebido,
+Não levais de vencer-me grande glória;
+Maior a levo eu de ser vencido.
+
+                          Luís de Camões
+
+É ter com quem nos mata lealdade.
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Luís de Camões
+
+
+Amor é fogo que arde sem se ver;
+É ferida que dói e não se sente;
+É um contentamento descontente;
+É dor que desatina sem doer;
+
+É um não querer mais que bem querer;
+É solitário andar por entre a gente;
+É nunca contentar-se de contente;
+É cuidar que se ganha em se perder;
+
+É querer estar preso por vontade;
+É servir a quem vence, o vencedor;
+É ter com quem nos mata lealdade.
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Luís de Camões
+
+Tomou-me vossa vista soberana
+
+Tomou-me vossa vista soberana
+Aonde tinha as armas mais à mão,
+Por mostrar que quem busca defensão
+Contra esses belos olhos, que se engana.
+
+Por ficar da vitória mais ufana,
+Deixou-me armar primeiro da razão;
+Cuidei de me salvar, mas foi em vão,
+Que contra o Céu não vale defensa humana.
+
+Mas porém, se vos tinha prometido
+O vosso alto destino esta vitória,
+Ser-vos tudo bem pouco está sabido.
+
+Que posto que estivesse apercebido,
+Não levais de vencer-me grande glória;
+Maior a levo eu de ser vencido.
+
+                          Luís de Camões
+
+É ter com quem nos mata lealdade.
+
+Mas como causar pode seu favor
+Nos corações humanos amizade,
+Se tão contrário a si é o mesmo Amor?
+
+                           Pedro Novais

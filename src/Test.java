@@ -11,15 +11,6 @@ public class Test
     public static void main(String args[]) throws Exception
     {
 
-        //System.out.println(pdu.decodeLookup(s).toString());
-
-
-        //Recebi um HTTP REQUEST com o nome do ficheiro a transferir "file-to-send.txt"
-
-        //Pedir os metadados desse ficheiro a um ou mais dos servidores FastFileSrv (verificar se existe??)
-        
-        //Executar um algoritmo de descarga do ficheiro
-
         try (DatagramSocket socket = new DatagramSocket()) 
 		{
 			//irá ter lista de fast file servers
@@ -44,29 +35,42 @@ public class Test
 			pdu = pdu.decodeLookup(recebe.getData());
 			if(pdu.getFileID() != "")
 			{
-				int tamFile = pdu.getTamFich();
 				//Pedir transferir ficheiro
+				int tamFile = pdu.getTamFich();
 				envia = new DatagramPacket(recebe.getData(), recebe.getData().length, address, 8888);
 				socket.send(envia);
 
-				message = new byte[1024];
-				recebe = new DatagramPacket(message, message.length);
-				System.out.println("Vai receber");
-				socket.receive(recebe);
 
 
-				System.out.println("Recebeu");
-				byte[] fileBytes = new byte[tamFile]; 
-				System.arraycopy(recebe.getData(), 18, fileBytes, 0, tamFile);
-
-				File f = new File("pedro.txt");
-				if (!f.exists()) {
-	     			f.createNewFile();
-	 		 	}
+				//Recebe Ficheiro
+				File f = new File(fileName);
+				if (!f.exists()) {f.createNewFile();}
 				FileOutputStream fos = new FileOutputStream(f);
-				fos.write(fileBytes);
+
+				while(tamFile > 2048)
+				{
+					System.out.println("T: " + tamFile);
+					byte[] fileBytes = new byte[2048];
+					message = new byte[2068];
+					recebe = new DatagramPacket(message, message.length);		
+					socket.receive(recebe);
+					System.arraycopy(recebe.getData(), 18, fileBytes, 0, 2048);
+					fos.write(fileBytes);
+					tamFile -= 2048;
+				}
+		
+				if(tamFile > 0)
+				{
+					System.out.println("TI: " + tamFile);
+					message = new byte[tamFile + 20];
+					recebe = new DatagramPacket(message, message.length);
+					socket.receive(recebe);
+					byte[] fileBytes = new byte[tamFile];
+					System.arraycopy(recebe.getData(), 18, fileBytes, 0, tamFile);
+					fos.write(fileBytes);
+				}	
 				fos.flush();
-				System.out.println();
+
 			}
 		}
 
