@@ -4,6 +4,7 @@ import java.util.zip.Checksum;
 
 public class FSCPDU {
 
+    //Dois tipos, Controlo e Dados 
     private byte tipo;
     private byte subtipo;
     private long seqNum;

@@ -12,8 +12,16 @@ public class Lookup extends Data {
         super(seq, (byte) 0);
         this.tamFich = tamFich;
         this.fileIDsize = fidsize;
-        this.fileID = fileid;
+        this.fileID = new String(fileid);
         this.hash = hash;
+    }
+
+    public Lookup(){
+        super(0, (byte) 0);
+        this.tamFich = 0;
+        this.fileIDsize = 0;
+        this.fileID = "";
+        this.hash = null;
     }
 
     public int getTamFich() {
@@ -78,8 +86,9 @@ public class Lookup extends Data {
         i+=4;
 
         //Array de bytes do fileID
-        byte[] idBytes = Arrays.copyOfRange(bytes,i,i+fileIDsize);
+        byte[] idBytes = Arrays.copyOfRange(bytes,i,i+fidsize);
         //Conversão para String
+        System.out.println();
         String fID = new String(idBytes,Charset.forName("UTF-8"));
 
         byte[] hash = Arrays.copyOfRange(bytes,i+fileIDsize, bytes.length);
