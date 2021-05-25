@@ -1,0 +1,10 @@
+--2021-05-25 23:51:50--  http://localhost:8080/file-to-send.txt
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:8080... connected.
+HTTP request sent, awaiting response... No data received.
+Retrying.
+
+--2021-05-25 23:51:51--  (try: 2)  http://localhost:8080/file-to-send.txt
+Connecting to localhost (localhost)|127.0.0.1|:8080... failed: Connection refused.
+Resolving localhost (localhost)... 127.0.0.1
+Connecting to localhost (localhost)|127.0.0.1|:8080... failed: Connection refused.

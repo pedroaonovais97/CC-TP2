@@ -10,6 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class HttpWorker extends Thread implements Runnable
 {
@@ -47,11 +53,18 @@ public class HttpWorker extends Thread implements Runnable
             }
             catch(Exception e){}
 
+            ServerSocket ss = new ServerSocket(8080);
+            Socket socketTCP = ss.accept();
 
+            BufferedReader in = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+            PrintWriter out = new PrintWriter(socketTCP.getOutputStream());
 
-            
-
-
+            String line;
+            while ((line = in.readLine()) != null) 
+            {
+                if(line.substring(0,3).toString() == "GET");
+                    System.out.println(line);
+            }
             
             String server = "";
             
@@ -65,6 +78,10 @@ public class HttpWorker extends Thread implements Runnable
             {
                 System.out.println(ex.getMessage());
             }
+
+            socketTCP.shutdownOutput();
+            socketTCP.shutdownInput();
+            socketTCP.close();
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -72,7 +89,7 @@ public class HttpWorker extends Thread implements Runnable
     }
 
 
-    public void connectFST(String fileName, String addrName) throws Exception
+    public byte[] connectFST(String fileName, String addrName) throws Exception
     {
         try (DatagramSocket socket = new DatagramSocket()) 
         {
@@ -136,5 +153,7 @@ public class HttpWorker extends Thread implements Runnable
 
             }
         }
+
+        return null;
     }
 }
