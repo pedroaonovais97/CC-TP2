@@ -60,7 +60,7 @@ public class FastFileSrv
 			Data dataPDU = new Data(0,(byte) 0);
 			dataPDU.setSeqNum(i);
 			byte[] bytesToSend = new byte[2048];	
-			System.out.println("Desde: " + (i*2048) + "Num:" + lastTam);			
+			System.out.println("Desde: " + (i*2048) + " Num:" + lastTam);			
 			System.arraycopy(arr, i*2048, bytesToSend, 0, lastTam);
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );

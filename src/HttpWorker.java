@@ -11,11 +11,17 @@ import java.util.Map;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.DataOutputStream;
+
 
 public class HttpWorker extends Thread implements Runnable
 {
@@ -58,25 +64,41 @@ public class HttpWorker extends Thread implements Runnable
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
             PrintWriter out = new PrintWriter(socketTCP.getOutputStream());
+            
 
             String line;
-            while ((line = in.readLine()) != null) 
+            String fileName = "";
+            boolean flag = true;
+            while (flag) 
             {
-                if(line.substring(0,3).toString() == "GET");
-                    System.out.println(line);
+                line = in.readLine();
+                if(line.substring(0,3).toString().equals("GET"))
+                {
+                    String[] splited = line.split("\\s+");
+                    fileName = splited[1].substring(1,splited[1].length()).toString();
+                    flag = false;
+                }
             }
-            
+
             String server = "";
-            
+
             for(String i : fstServers.keySet())
                 if(!fstServers.get(i))
                     server = i;
             try {
-                connectFST("file-to-send.txt",server);
+                byte[] byteResponse = connectFST(fileName,server);
+                System.out.println(byteResponse.length);
+                String res = "HTTP/1.0 200 OK\n"+
+                         "Content-Length: " + byteResponse.length+ "\n\n";
+                //out.print(res);
+                socketTCP.getOutputStream().write(res.getBytes());
+                socketTCP.getOutputStream().write(byteResponse);
+                socketTCP.getOutputStream().flush();
             }
             catch(IOException ex)
             {
                 System.out.println(ex.getMessage());
+
             }
 
             socketTCP.shutdownOutput();
@@ -91,6 +113,7 @@ public class HttpWorker extends Thread implements Runnable
 
     public byte[] connectFST(String fileName, String addrName) throws Exception
     {
+        byte[] res = null;
         try (DatagramSocket socket = new DatagramSocket()) 
         {
             //irá ter lista de fast file servers
@@ -120,40 +143,41 @@ public class HttpWorker extends Thread implements Runnable
                 envia = new DatagramPacket(recebe.getData(), recebe.getData().length, address, 8888);
                 socket.send(envia);
 
-
-
                 //Recebe Ficheiro
-                File f = new File(fileName);
-                if (!f.exists()) {f.createNewFile();}
-                FileOutputStream fos = new FileOutputStream(f);
+                //File f = new File("copy"+fileName);
+                //if (!f.exists()) {f.createNewFile();}
+                //FileOutputStream fos = new FileOutputStream(f);
+                res = new byte[tamFile];
+                int ite = 0;
 
                 while(tamFile > 2048)
                 {
-                    System.out.println("T: " + tamFile);
                     byte[] fileBytes = new byte[2048];
                     message = new byte[2068];
-                    recebe = new DatagramPacket(message, message.length);       
+                    recebe = new DatagramPacket(message, message.length);  
                     socket.receive(recebe);
                     System.arraycopy(recebe.getData(), 18, fileBytes, 0, 2048);
-                    fos.write(fileBytes);
+                    System.arraycopy(fileBytes,0,res,ite*2048,2048);
+                    //fos.write(fileBytes);
+                    ite++;
                     tamFile -= 2048;
                 }
         
                 if(tamFile > 0)
                 {
-                    System.out.println("TI: " + tamFile);
                     message = new byte[tamFile + 20];
                     recebe = new DatagramPacket(message, message.length);
                     socket.receive(recebe);
                     byte[] fileBytes = new byte[tamFile];
                     System.arraycopy(recebe.getData(), 18, fileBytes, 0, tamFile);
-                    fos.write(fileBytes);
+                    System.arraycopy(fileBytes,0,res,ite*2048,tamFile);
+                    //fos.write(fileBytes);
                 }   
-                fos.flush();
+                //fos.flush();
 
             }
         }
 
-        return null;
+        return res;
     }
 }
