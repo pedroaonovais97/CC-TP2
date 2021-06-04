@@ -92,10 +92,12 @@ public class FastFileSrv
 			System.out.println("Enviou");
 			socket.disconnect();
 			socket.close();
+			System.out.println("Desligou");
 		}
 
-		try (DatagramSocket socket = new DatagramSocket(8888,addr)) 
+		try (DatagramSocket socket = new DatagramSocket(8888)) 
 		{
+			System.out.println("Teste");
 			byte[] aReceber = new byte[1024]; 
 			DatagramPacket pedido =  new DatagramPacket(aReceber, aReceber.length);
 

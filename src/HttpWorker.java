@@ -36,13 +36,13 @@ public class HttpWorker extends Thread implements Runnable
     @Override
     public void run(){
         try {
-            
+
+            System.out.println("À Espera de Servidor...");
             try (DatagramSocket socket = new DatagramSocket(8880)) 
             {
                 
                 byte[] crPackets = new byte[1024];
                 DatagramPacket recebe = new DatagramPacket(crPackets, crPackets.length);
-                System.out.println("À Espera de Servidor...");
                 socket.receive(recebe);
                 System.out.println(recebe.getAddress().toString());
                 socket.disconnect();
@@ -60,50 +60,56 @@ public class HttpWorker extends Thread implements Runnable
             catch(Exception e){}
 
             ServerSocket ss = new ServerSocket(8080);
-            Socket socketTCP = ss.accept();
+            Socket socketTCP = null;
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
-            PrintWriter out = new PrintWriter(socketTCP.getOutputStream());
-            
-
-            String line;
-            String fileName = "";
-            boolean flag = true;
-            while (flag) 
+            boolean ligado = true;
+            while(ligado)
             {
-                line = in.readLine();
-                if(line.substring(0,3).toString().equals("GET"))
+                socketTCP = ss.accept();
+                BufferedReader in = new BufferedReader(new InputStreamReader(socketTCP.getInputStream()));
+                PrintWriter out = new PrintWriter(socketTCP.getOutputStream());
+
+
+                String line;
+                String fileName = "";
+                boolean flag = true;
+                while (flag) 
                 {
-                    String[] splited = line.split("\\s+");
-                    fileName = splited[1].substring(1,splited[1].length()).toString();
-                    flag = false;
+                    line = in.readLine();
+                    if(line.substring(0,3).toString().equals("GET"))
+                    {
+                        String[] splited = line.split("\\s+");
+                        fileName = splited[1].substring(1,splited[1].length()).toString();
+                        flag = false;
+                    }
                 }
-            }
 
-            String server = "";
+                String server = "";
 
-            for(String i : fstServers.keySet())
-                if(!fstServers.get(i))
-                    server = i;
-            try {
-                byte[] byteResponse = connectFST(fileName,server);
-                System.out.println(byteResponse.length);
-                String res = "HTTP/1.0 200 OK\n"+
-                         "Content-Length: " + byteResponse.length+ "\n\n";
-                //out.print(res);
-                socketTCP.getOutputStream().write(res.getBytes());
-                socketTCP.getOutputStream().write(byteResponse);
-                socketTCP.getOutputStream().flush();
-            }
-            catch(IOException ex)
-            {
-                System.out.println(ex.getMessage());
+                for(String i : fstServers.keySet())
+                    if(!fstServers.get(i))
+                        server = i;
+                try {
+                    byte[] byteResponse = connectFST(fileName,server);
+                    System.out.println(byteResponse.length);
+                    String res = "HTTP/1.0 200 OK\n"+
+                             "Content-Length: " + byteResponse.length+ "\n\n";
+                    //out.print(res);
+                    socketTCP.getOutputStream().write(res.getBytes());
+                    socketTCP.getOutputStream().write(byteResponse);
+                    socketTCP.getOutputStream().flush();
+                }
+                catch(IOException ex)
+                {
+                    System.out.println(ex.getMessage());
 
+                }
             }
 
             socketTCP.shutdownOutput();
             socketTCP.shutdownInput();
             socketTCP.close();
+
         }
         catch (Exception e){
             System.out.println(e.getMessage());
